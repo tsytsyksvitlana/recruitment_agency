@@ -1,3 +1,4 @@
 myenv/
 .idea/
 .env
+node_modules/

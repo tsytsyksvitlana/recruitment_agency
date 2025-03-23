@@ -9,6 +9,10 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.13"
 django = "^5.1.7"
+psycopg2 = "^2.9.10"
+python-dotenv = "^1.0.1"
+social-auth-app-django = "^5.4.3"
+django-widget-tweaks = "^1.5.0"
 
 
 [tool.poetry.group.dev.dependencies]
