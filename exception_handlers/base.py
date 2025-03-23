@@ -16,8 +16,3 @@ class NotRequiredData(Exception):
 class NoAuthUser(Exception):
     status_code = status.HTTP_407_PROXY_AUTHENTICATION_REQUIRED
     message = 'User have to be authenticated!'
-
-
-class EnoughtLikes(Exception):
-    status_code = status.HTTP_409_CONFLICT
-    message = 'You have already liked this post'

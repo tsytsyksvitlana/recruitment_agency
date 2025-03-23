@@ -3,7 +3,7 @@ repos:
     rev: 'v0.4.5'
     hooks:
       - id: ruff
-        args: ["--fix", "--exit-non-zero-on-fix", "."]
+        args: ["--fix", "--exit-non-zero-on-fix", ".", "--exclude=__init__.py"]
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.2
     hooks:
@@ -13,7 +13,7 @@ repos:
     rev: 7.1.1
     hooks:
       - id: flake8
-        args: ["--max-line-length=80", "--extend-ignore=E501, E122, E128"]
+        args: ["--max-line-length=80", "--extend-ignore=E501, E122, E128", "--exclude=__init__.py"]
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.15.2
     hooks:

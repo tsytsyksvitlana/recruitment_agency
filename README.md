@@ -25,9 +25,25 @@ On Linux\MacOS:
 ```
 source myenv/bin/activate
 ```
+2. Install dependencies with:
+```
+poetry install
+```
+3. Run application
+```
+python manage.py runserver
+```
 
-## Pre-commit command
-
+## Migrations
+1. To make migrations
+```
+python manage.py makemigrations
+```
+2. To run migrations
+```
+python manage.py migrate
+```
+## Pre-commit Command
 ```
 pre-commit run --all-files
 ```
