@@ -1,0 +1,96 @@
+{% extends "main.html" %}
+
+{% block content %}
+    <h2 class="page-title">Ваші вакансії</h2>
+    <a href="{% url 'vacancy-create' %}" class="btn btn-primary mb-3">Створити вакансію</a>
+    <ul class="vacancy-list">
+        {% for vacancy in vacancies %}
+            <li class="vacancy-item">
+                <div class="vacancy-details">
+                    <strong>{{ vacancy.title }}</strong> - {{ vacancy.company.name }}
+                </div>
+                <div class="vacancy-actions">
+                    <a href="{% url 'vacancy-edit' vacancy.id %}" class="btn btn-warning btn-sm">Редагувати</a>
+                    <form action="{% url 'vacancy-deactivate' vacancy.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Деактивувати</button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        /* Основні стилі для сторінки вакансій */
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #004085;
+            margin-bottom: 20px;
+        }
+
+        .vacancy-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .vacancy-item {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vacancy-details {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .vacancy-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #004085;
+            border-color: #004085;
+        }
+
+        .btn-primary:hover {
+            background-color: #002b4e;
+            border-color: #002b4e;
+        }
+
+        .btn-warning {
+            background-color: #ff9800;
+            border-color: #ff9800;
+        }
+
+        .btn-warning:hover {
+            background-color: #e68900;
+            border-color: #e68900;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+    </style>
+{% endblock %}

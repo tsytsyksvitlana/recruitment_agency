@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="jumbotron text-center">
+            <img src="{% static 'images/logo.svg' %}" alt="Logo" class="img-fluid mb-4 logo-animate" style="max-width: 150px; height: auto;">
+            <h2 class="display-4">Привіт, {{ user.username }}!</h2>
+            <p class="lead">Вітаємо на нашому сайті!</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .logo-animate {
+        animation: growShrink 3s ease-in-out infinite;
+    }
+
+    @keyframes growShrink {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+    }
+</style>
+{% endblock %}

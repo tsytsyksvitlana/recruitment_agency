@@ -14,7 +14,7 @@
       crossorigin="anonymous"
     />
     <style>
-      /* Additional custom styles for the Recruitment Agency theme */
+      /* Custom styles for the Recruitment Agency theme */
       body {
         background-color: #f7f8fa;
         font-family: 'Arial', sans-serif;
@@ -22,16 +22,49 @@
       }
 
       .navbar {
-        background-color: #004085; /* Dark blue instead of bright blue */
+        background-color: #004085; /* Dark blue */
+        text-align: center; /* Center the text in the header */
       }
 
       .navbar .navbar-brand {
         color: #fff;
         font-weight: bold;
+        font-size: 24px;
       }
 
       .navbar .navbar-toggler-icon {
         background-color: #fff;
+      }
+
+      .navbar-nav {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding-left: 0;
+      }
+
+      .navbar-nav .nav-item {
+        padding: 0 15px;
+        margin: 0;
+      }
+
+      .navbar-nav .nav-link {
+        color: #fff;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: 500;
+        padding: 10px;
+        transition: color 0.3s ease, transform 0.3s ease;
+      }
+
+      /* Animation on hover */
+      .navbar-nav .nav-link:hover {
+        color: #f1c40f;
+        transform: scale(1.1);
+      }
+
+      .navbar-nav .nav-link:active {
+        color: #f39c12;
       }
 
       .card {
@@ -39,7 +72,7 @@
       }
 
       .card-header {
-        background-color: #004085; /* Dark blue header */
+        background-color: #004085;
         color: white;
         font-weight: bold;
       }
@@ -50,7 +83,7 @@
       }
 
       .btn-primary:hover {
-        background-color: #002b4e; /* Darker shade on hover */
+        background-color: #002b4e;
         border-color: #002b4e;
       }
 
@@ -81,14 +114,23 @@
         border-color: #004085;
       }
 
-      /* Centering the header text vertically */
+      /* Centering the navbar items */
       .navbar .navbar-brand {
         display: flex;
         align-items: center;
+        justify-content: center;
         height: 100%;
       }
 
+      /* Footer Styling */
+      .footer p {
+        margin: 0;
+        padding: 0;
+      }
+
     </style>
+    {% block extra_styles %}
+    {% endblock %}
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -107,15 +149,46 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link active" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'register' %}">Register</a>
-            </li>
+            {% if user.is_authenticated %}
+              {% if user.role == 'recruiter' %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'candidates-list' %}">Candidates</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'vacancy-list' %}">Vacancies</a>
+                </li>
+              {% elif user.role == 'employer' %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'company_list' %}">Company</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'vacancy-list' %}">Recruiters</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'vacancy-list' %}">Vacancies</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'candidates-list' %}">Candidates</a>
+                </li>
+              {% elif user.role == 'jobseeker' %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'vacancy-list' %}">Vacancies</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'profile' %}">My Profile</a>
+                </li>
+              {% endif %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+              </li>
+            {% endif %}
           </ul>
         </div>
       </div>

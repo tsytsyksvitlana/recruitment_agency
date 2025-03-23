@@ -1,0 +1,57 @@
+{% extends "main.html" %}
+
+{% block content %}
+    <h2 class="page-title">{% if object %}Редагувати вакансію{% else %}Створити вакансію{% endif %}</h2>
+    <form method="post" class="form-container">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+    </form>
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        /* Основні стилі для форми */
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #004085;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            border-radius: 5px;
+            padding: 10px 20px;
+        }
+
+        .btn-primary {
+            background-color: #004085;
+            border-color: #004085;
+        }
+
+        .btn-primary:hover {
+            background-color: #002b4e;
+            border-color: #002b4e;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
+{% endblock %}

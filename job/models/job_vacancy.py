@@ -8,6 +8,7 @@ class JobVacancy(models.Model):
     location = models.ForeignKey('job.Location', on_delete=models.SET_NULL, null=True, blank=True, related_name="vacancies")
     created_at = models.DateTimeField(auto_now_add=True)
     recruiter = models.ForeignKey('job.Recruiter', on_delete=models.CASCADE, related_name="posted_jobs")
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title

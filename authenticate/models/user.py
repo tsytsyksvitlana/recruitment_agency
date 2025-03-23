@@ -8,6 +8,7 @@ class User(AbstractUser):
     ROLE_CHOICES = (
         ('recruiter', 'Recruiter'),
         ('jobseeker', 'Job Seeker'),
+        ('employer', 'Employer')
     )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
@@ -15,4 +16,4 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
-        return f"User(id={self.id}, email={self.email})"
+        return f"User(id={self.id}, email={self.email}, role={self.role})"
