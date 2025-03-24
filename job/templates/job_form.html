@@ -13,45 +13,100 @@
 
 {% block extra_styles %}
     <style>
-        /* Основні стилі для форми */
-        .page-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #004085;
-            margin-bottom: 20px;
+        /* Загальні стилі */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
         }
 
+        /* Заголовок сторінки */
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Основні стилі для контейнера форми */
         .form-container {
             background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 650px;
+            margin: 30px auto;
+            border: 1px solid #e1e8f0;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
+            padding: 12px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 1px solid #d1d9e6;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-container input:focus,
+        .form-container select:focus,
+        .form-container textarea:focus {
+            border-color: #4ca1af;
+            outline: none;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .btn {
-            border-radius: 5px;
-            padding: 10px 20px;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 16px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .btn-primary {
-            background-color: #004085;
-            border-color: #004085;
+            background-color: #4ca1af;
+            border: none;
+            color: white;
         }
 
         .btn-primary:hover {
-            background-color: #002b4e;
-            border-color: #002b4e;
+            background-color: #3b8f97;
         }
 
-        .form-control {
-            border-radius: 5px;
-            padding: 10px;
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Поля з помилками */
+        .form-group .text-danger {
+            font-size: 12px;
+            color: #e74c3c;
+            margin-top: 5px;
+        }
+
+        /* Підказки для полів */
+        .form-group label {
+            font-weight: 600;
+            color: #003366;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-container .form-group input::placeholder,
+        .form-container .form-group textarea::placeholder {
+            color: #7f8c8d;
         }
     </style>
 {% endblock %}

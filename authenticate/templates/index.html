@@ -6,7 +6,7 @@
     <div class="container mt-5">
         <div class="jumbotron text-center">
             <img src="{% static 'images/logo.svg' %}" alt="Logo" class="img-fluid mb-4 logo-animate" style="max-width: 150px; height: auto;">
-            <h2 class="display-4">Привіт, {{ user.username }}!</h2>
+            <h2 class="display-4">Привіт, {{ user.first_name }} {{ user.last_name }}!</h2>
             <p class="lead">Вітаємо на нашому сайті!</p>
         </div>
     </div>

@@ -14,14 +14,19 @@
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="{{ form.username.id_for_label }}" class="form-label">{{ form.username.label }}</label>
-                            {{ form.username|add_class:"form-control shadow-sm" }}
-                            <div class="text-danger">{{ form.username.errors }}</div>
-                        </div>
-                        <div class="mb-3">
                             <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
                             {{ form.email|add_class:"form-control shadow-sm" }}
                             <div class="text-danger">{{ form.email.errors }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
+                            {{ form.first_name|add_class:"form-control shadow-sm" }}
+                            <div class="text-danger">{{ form.first_name.errors }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
+                            {{ form.last_name|add_class:"form-control shadow-sm" }}
+                            <div class="text-danger">{{ form.last_name.errors }}</div>
                         </div>
                         <div class="mb-3">
                             <label for="{{ form.password1.id_for_label }}" class="form-label">{{ form.password1.label }}</label>

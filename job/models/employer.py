@@ -1,5 +1,7 @@
 from django.db import models
+
 from authenticate.models import User
+
 
 class Employer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employer_profile')

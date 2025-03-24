@@ -5,6 +5,8 @@ from django.db import models
 class User(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=150, unique=True)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
     ROLE_CHOICES = (
         ('recruiter', 'Recruiter'),
         ('jobseeker', 'Job Seeker'),

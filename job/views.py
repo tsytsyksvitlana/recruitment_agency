@@ -5,7 +5,7 @@ from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 
-from job.forms import JobVacancyForm, CompanyForm
+from job.forms import CompanyForm, JobVacancyForm
 from job.models import Company
 from job.models.job_vacancy import JobVacancy
 
@@ -44,6 +44,13 @@ def deactivate_vacancy(request, pk):
     return redirect('vacancy-list')
 
 
+def activate_vacancy(request, pk):
+    vacancy = get_object_or_404(JobVacancy, pk=pk, recruiter__user=request.user)
+    vacancy.is_active = True
+    vacancy.save()
+    return redirect('vacancy-list')
+
+
 class CreateCompanyView(View):
     def get(self, request):
         form = CompanyForm()
@@ -57,11 +64,6 @@ class CreateCompanyView(View):
         return render(request, 'create_company.html', {'form': form})
 
 
-class IndexView(LoginRequiredMixin, View):
-    def get(self, request):
-        user = request.user
-        return render(request, 'index.html', {'user': user})
-
 class CompanyDetailView(DetailView):
     model = Company
     template_name = 'company_detail.html'
@@ -72,4 +74,3 @@ class CompanyListView(ListView):
     model = Company
     template_name = 'company_list.html'  # шаблон для відображення списку компаній
     context_object_name = 'companies'
-
