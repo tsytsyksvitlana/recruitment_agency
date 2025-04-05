@@ -36,144 +36,159 @@
 
 {% block extra_styles %}
     <style>
-        /* Загальні стилі для сторінки вакансій */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
+            background-color: #f4f7fc;
             margin: 0;
             padding: 0;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px;
-        }
-
         .page-title {
-            font-size: 32px;
-            font-weight: 700;
+            font-size: 28px;
+            font-weight: 600;
             color: #003366;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .vacancy-list {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
         }
 
         .vacancy-item {
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-start;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            min-height: 160px;
-        }
-
-        .vacancy-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border: 1px solid #e1e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s ease;
         }
 
         .vacancy-item.inactive {
-            background-color: #e0e0e0;  /* сірий фон для неактивних вакансій */
-            color: #999;  /* змінити колір тексту для кращого контрасту */
+            background-color: #f0f0f0;
+            opacity: 0.7;
         }
 
         .vacancy-details {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            color: #333;
-            line-height: 1.4;
+            margin-bottom: 10px;
+            color: #003366;
         }
 
         .vacancy-description {
-            font-size: 16px;
-            color: #666;
-            margin-top: 10px;
-            margin-bottom: 20px;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
         }
 
-        .vacancy-actions {
-            display: flex;
-            gap: 16px;
+        .vacancy-actions .btn {
+            margin-right: 8px;
+            width: auto;
         }
 
         .btn {
             border-radius: 6px;
-            padding: 10px 18px;
+            padding: 8px 16px;
             font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
         }
 
         .btn-primary {
-            background-color: #0066cc;
-            border-color: #0066cc;
+            background-color: #4ca1af;
             color: white;
         }
 
         .btn-primary:hover {
-            background-color: #004d99;
-            border-color: #004d99;
+            background-color: #3b8f97;
         }
 
         .btn-warning {
-            background-color: #ff9800;
-            border-color: #ff9800;
+            background-color: #f39c12;
             color: white;
         }
 
         .btn-warning:hover {
-            background-color: #e68900;
-            border-color: #e68900;
+            background-color: #e67e22;
         }
 
         .btn-danger {
             background-color: #e74c3c;
-            border-color: #e74c3c;
             color: white;
         }
 
         .btn-danger:hover {
             background-color: #c0392b;
-            border-color: #c0392b;
         }
 
         .btn-success {
-            background-color: #28a745;
-            border-color: #28a745;
+            background-color: #2ecc71;
             color: white;
         }
 
         .btn-success:hover {
-            background-color: #218838;
-            border-color: #218838;
+            background-color: #27ae60;
         }
 
-        /* Додаткові стилі для кнопок */
-        .btn-sm {
-            padding: 6px 12px;
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 650px;
+            margin: 30px auto;
+            border: 1px solid #e1e8f0;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 1px solid #d1d9e6;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-container input:focus,
+        .form-container select:focus,
+        .form-container textarea:focus {
+            border-color: #4ca1af;
+            outline: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group .text-danger {
             font-size: 12px;
+            color: #e74c3c;
+            margin-top: 5px;
         }
 
-        /* Стилі для проміжку між елементами */
-        .vacancy-actions a,
-        .vacancy-actions form {
-            display: inline-block;
+        .form-group label {
+            font-weight: 600;
+            color: #003366;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-container .form-group input::placeholder,
+        .form-container .form-group textarea::placeholder {
+            color: #7f8c8d;
         }
     </style>
 {% endblock %}

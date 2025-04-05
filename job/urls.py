@@ -7,7 +7,8 @@ from job.views import (
     JobVacancyCreateView,
     JobVacancyListView,
     JobVacancyUpdateView,
-    deactivate_vacancy, activate_vacancy
+    activate_vacancy,
+    deactivate_vacancy
 )
 
 urlpatterns = [

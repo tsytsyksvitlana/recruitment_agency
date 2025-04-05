@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
@@ -26,7 +28,12 @@ class JobVacancyCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('vacancy-list')
 
     def form_valid(self, form):
-        form.instance.recruiter = self.request.user.recruiter_profile
+        try:
+            form.instance.recruiter = self.request.user.recruiter_profile
+        except ObjectDoesNotExist:
+            messages.error(
+                self.request, "Ваш профіль рекрутера не знайдено. Створіть профіль перед створенням вакансії."
+            )
         return super().form_valid(form)
 
 
@@ -60,7 +67,7 @@ class CreateCompanyView(View):
         form = CompanyForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('company_list')  # Redirect to company list or another page
+            return redirect('company_list')
         return render(request, 'create_company.html', {'form': form})
 
 
@@ -72,5 +79,5 @@ class CompanyDetailView(DetailView):
 
 class CompanyListView(ListView):
     model = Company
-    template_name = 'company_list.html'  # шаблон для відображення списку компаній
+    template_name = 'company_list.html'
     context_object_name = 'companies'

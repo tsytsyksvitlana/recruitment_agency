@@ -6,10 +6,11 @@ from rest_framework_simplejwt.views import (
 )
 
 from authenticate.views import (
+    IndexView,
     RecruiterCreateView,
     UserLoginView,
     UserLogoutView,
-    UserRegisterView, IndexView
+    UserRegisterView
 )
 
 urlpatterns = [
