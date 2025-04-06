@@ -4,13 +4,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 
-from job.forms import CompanyForm, JobVacancyForm
-from job.models import Company, Employer, Recruiter
+from job.forms import CompanyForm, JobVacancyForm, JobSeekerProfileForm
+from job.models import Company, Employer, Recruiter, JobSeekerProfile
 from job.models.job_vacancy import JobVacancy
 
 logger = logging.getLogger(__name__)
@@ -160,3 +160,43 @@ class RecruiterListView(LoginRequiredMixin, ListView):
         company = employer.company
 
         return Recruiter.objects.filter(company=company)
+
+
+class JobSeekerProfileCreateView(CreateView):
+    model = JobSeekerProfile
+    form_class = JobSeekerProfileForm
+    template_name = 'profile_form.html'
+    success_url = reverse_lazy('profile_view')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user.jobseeker_profile
+        return super().form_valid(form)
+
+
+class JobSeekerProfileUpdateView(UpdateView):
+    model = JobSeekerProfile
+    form_class = JobSeekerProfileForm
+    template_name = 'profile_form.html'
+    success_url = reverse_lazy('profile_view')
+
+    def get_object(self, queryset=None):
+        return self.request.user.jobseeker_profile.profile
+
+
+class JobSeekerProfileDetailView(DetailView):
+    model = JobSeekerProfile
+    template_name = 'profile_view.html'
+    context_object_name = 'profile'
+
+    def get_object(self, queryset=None):
+        try:
+            profile = self.request.user.jobseeker_profile.profile
+        except JobSeekerProfile.DoesNotExist:
+            return None
+        return profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if not context.get('profile'):
+            context['create_profile_url'] = reverse('profile_create')
+        return context

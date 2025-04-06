@@ -1,0 +1,88 @@
+{% extends 'main.html' %}
+
+{% block content %}
+  <h2>{% if object.pk %}Edit{% else %}Create{% endif %} Your Profile</h2>
+
+  <div class="form-container">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="submit-button">{% if object.pk %}Update{% else %}Create{% endif %}</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  /* Styling same as before */
+  body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f7fc;
+  }
+
+  .form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 30px auto;
+  }
+
+  h2 {
+    text-align: center;
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-container form p {
+    font-size: 1.1em;
+    color: #555;
+  }
+
+  .submit-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 20px;
+  }
+
+  .submit-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+
+  .submit-button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.6);
+  }
+
+  @media (max-width: 768px) {
+    .form-container {
+      padding: 20px;
+    }
+
+    h2 {
+      font-size: 2em;
+    }
+
+    .submit-button {
+      font-size: 1em;
+    }
+  }
+</style>
+{% endblock %}

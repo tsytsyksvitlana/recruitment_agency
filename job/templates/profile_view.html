@@ -1,0 +1,108 @@
+{% extends 'main.html' %}
+
+{% block content %}
+  <h2>Your Profile</h2>
+
+  <div class="profile-container">
+    {% if profile %}
+      <p><strong>Skills:</strong> {{ profile.skills }}</p>
+      <p><strong>Experience:</strong> {{ profile.experience }}</p>
+      <p><strong>Education:</strong> {{ profile.education }}</p>
+      <p><strong>Location:</strong> {{ profile.location }}</p>
+
+      <a href="{% url 'profile_edit' %}" class="edit-button">Edit Profile</a>
+    {% else %}
+      <p>You don't have a profile yet. <a href="{{ create_profile_url }}" class="create-profile-link">Create your profile</a></p>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+  }
+
+  .profile-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 30px auto;
+    transition: all 0.3s ease;
+  }
+
+  .profile-container:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    text-align: center;
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.1em;
+    color: #555;
+    margin: 15px 0;
+  }
+
+  strong {
+    color: #007bff;
+  }
+
+  .edit-button,
+  .create-profile-link {
+    display: inline-block;
+    text-align: center;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .edit-button:hover,
+  .create-profile-link:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+
+  .edit-button:focus,
+  .create-profile-link:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.6);
+  }
+
+  .create-profile-link {
+    background-color: #28a745;
+    margin-top: 10px;
+  }
+
+  .create-profile-link:hover {
+    background-color: #218838;
+  }
+
+  @media (max-width: 768px) {
+    .profile-container {
+      padding: 20px;
+    }
+
+    h2 {
+      font-size: 2em;
+    }
+
+    .edit-button,
+    .create-profile-link {
+      font-size: 1em;
+    }
+  }
+</style>
+{% endblock %}

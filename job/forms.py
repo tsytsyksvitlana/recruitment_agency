@@ -1,6 +1,6 @@
 from django import forms
 
-from job.models import Employer
+from job.models import Employer, JobSeekerProfile
 from job.models.company import Company
 from job.models.job_vacancy import JobVacancy
 from job.models.location import Location
@@ -57,3 +57,39 @@ class CompanyForm(forms.ModelForm):
                     pass
 
         return company
+
+
+class JobSeekerProfileForm(forms.ModelForm):
+    # Fields for Location to be entered manually
+    city = forms.CharField(max_length=255, required=False, widget=forms.TextInput(attrs={'placeholder': 'City'}))
+    street = forms.CharField(max_length=255, required=False, widget=forms.TextInput(attrs={'placeholder': 'Street'}))
+    building = forms.CharField(max_length=50, required=False, widget=forms.TextInput(attrs={'placeholder': 'Building'}))
+    country = forms.CharField(max_length=255, required=False, widget=forms.TextInput(attrs={'placeholder': 'Country'}))
+    postal_code = forms.CharField(max_length=20, required=False,
+                                  widget=forms.TextInput(attrs={'placeholder': 'Postal Code'}))
+
+    class Meta:
+        model = JobSeekerProfile
+        fields = ['skills', 'experience', 'education', 'location']
+        widgets = {
+            'skills': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your skills'}),
+            'experience': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your experience'}),
+            'education': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your education details'}),
+        }
+
+    def save(self, commit=True):
+        # Save location if manually entered
+        location_data = {
+            'city': self.cleaned_data.get('city'),
+            'street': self.cleaned_data.get('street'),
+            'building': self.cleaned_data.get('building'),
+            'country': self.cleaned_data.get('country'),
+            'postal_code': self.cleaned_data.get('postal_code')
+        }
+
+        # Create a new Location instance if all location fields are provided
+        if any(location_data.values()):
+            location = Location.objects.create(**location_data)
+            self.instance.location = location
+
+        return super().save(commit)

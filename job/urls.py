@@ -10,7 +10,10 @@ from job.views import (
     MyCompanyView,
     activate_vacancy,
     deactivate_vacancy,
-    RecruiterListView
+    RecruiterListView,
+    JobSeekerProfileDetailView,
+    JobSeekerProfileUpdateView,
+    JobSeekerProfileCreateView
 )
 
 urlpatterns = [
@@ -21,6 +24,10 @@ urlpatterns = [
     path('<int:pk>/activate/', activate_vacancy, name='vacancy-activate'),
 
     path('candidates/', JobVacancyUpdateView.as_view(), name='candidates-list'),
+
+    path('profile/', JobSeekerProfileDetailView.as_view(), name='profile_view'),
+    path('profile/edit/', JobSeekerProfileUpdateView.as_view(), name='profile_edit'),
+    path('profile/create/', JobSeekerProfileCreateView.as_view(), name='profile_create'),
 
     path('company/create/', CreateCompanyView.as_view(), name='create_company'),
     path('companies/', CompanyListView.as_view(), name='company_list'),
