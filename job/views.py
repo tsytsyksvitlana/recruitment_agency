@@ -4,13 +4,24 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 
-from job.forms import CompanyForm, JobVacancyForm, JobSeekerProfileForm
-from job.models import Company, Employer, Recruiter, JobSeekerProfile
+from job.forms import (
+    CompanyForm,
+    JobApplicationForm,
+    JobSeekerProfileForm,
+    JobVacancyForm
+)
+from job.models import (
+    Company,
+    Employer,
+    JobApplication,
+    JobSeekerProfile,
+    Recruiter
+)
 from job.models.job_vacancy import JobVacancy
 
 logger = logging.getLogger(__name__)
@@ -200,3 +211,52 @@ class JobSeekerProfileDetailView(DetailView):
         if not context.get('profile'):
             context['create_profile_url'] = reverse('profile_create')
         return context
+
+
+class JobVacancyListView(ListView):
+    model = JobVacancy
+    template_name = 'job_vacancies_list.html'
+    context_object_name = 'vacancies'
+
+    def get_queryset(self):
+        queryset = JobVacancy.objects.all()
+
+        search_title = self.request.GET.get('title', '')
+        search_location = self.request.GET.get('location', '')
+
+        if search_title:
+            queryset = queryset.filter(title__icontains=search_title)
+
+        if search_location:
+            queryset = queryset.filter(location__icontains=search_location)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            jobseeker_profile = self.request.user.jobseeker_profile
+            applied_vacancies = jobseeker_profile.applications.values_list('vacancy', flat=True)
+            context['applied_vacancies'] = applied_vacancies
+
+        return context
+
+
+class JobApplicationCreateView(CreateView):
+    model = JobApplication
+    form_class = JobApplicationForm
+    template_name = 'job_application_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vacancy'] = JobVacancy.objects.get(id=self.kwargs['vacancy_id'])
+        return context
+
+    def form_valid(self, form):
+        form.instance.job_seeker = self.request.user.jobseeker_profile
+        form.instance.vacancy = JobVacancy.objects.get(id=self.kwargs['vacancy_id'])
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('jobseeker_job_vacancies_list')

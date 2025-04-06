@@ -1,6 +1,6 @@
 from django import forms
 
-from job.models import Employer, JobSeekerProfile
+from job.models import Employer, JobApplication, JobSeekerProfile
 from job.models.company import Company
 from job.models.job_vacancy import JobVacancy
 from job.models.location import Location
@@ -60,7 +60,6 @@ class CompanyForm(forms.ModelForm):
 
 
 class JobSeekerProfileForm(forms.ModelForm):
-    # Fields for Location to be entered manually
     city = forms.CharField(max_length=255, required=False, widget=forms.TextInput(attrs={'placeholder': 'City'}))
     street = forms.CharField(max_length=255, required=False, widget=forms.TextInput(attrs={'placeholder': 'Street'}))
     building = forms.CharField(max_length=50, required=False, widget=forms.TextInput(attrs={'placeholder': 'Building'}))
@@ -78,7 +77,6 @@ class JobSeekerProfileForm(forms.ModelForm):
         }
 
     def save(self, commit=True):
-        # Save location if manually entered
         location_data = {
             'city': self.cleaned_data.get('city'),
             'street': self.cleaned_data.get('street'),
@@ -87,9 +85,17 @@ class JobSeekerProfileForm(forms.ModelForm):
             'postal_code': self.cleaned_data.get('postal_code')
         }
 
-        # Create a new Location instance if all location fields are provided
         if any(location_data.values()):
             location = Location.objects.create(**location_data)
             self.instance.location = location
 
         return super().save(commit)
+
+
+class JobApplicationForm(forms.ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = ['cover_letter']
+        widgets = {
+            'cover_letter': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your cover letter'}),
+        }

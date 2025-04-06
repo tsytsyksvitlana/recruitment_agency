@@ -1,0 +1,110 @@
+{% extends 'main.html' %}
+
+{% block content %}
+  <h2>Apply for the Job Vacancy: {{ vacancy.title }}</h2>
+  <form method="post" action="{% url 'job_application_create' vacancy.id %}" class="application-form">
+      {% csrf_token %}
+      <div class="form-group">
+          {{ form.as_p }}
+      </div>
+      <button type="submit" class="apply-button">Apply</button>
+  </form>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  /* General Styles */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+
+  h2 {
+    text-align: center;
+    font-size: 2.2em;
+    margin-bottom: 25px;
+    color: #0056b3;
+  }
+
+  p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  /* Form Styles */
+  .application-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .form-group p {
+    font-size: 14px;
+    color: #007bff;
+  }
+
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #555;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+  }
+
+  .apply-button {
+    padding: 12px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+  }
+
+  .apply-button:hover {
+    background-color: #218838;
+  }
+
+  .apply-button:disabled {
+    background-color: #grey;
+    cursor: not-allowed;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .application-form {
+      padding: 15px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .apply-button {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+</style>
+{% endblock %}
