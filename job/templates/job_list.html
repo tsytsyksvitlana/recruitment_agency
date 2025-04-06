@@ -10,9 +10,20 @@
                     <div class="vacancy-details">
                         <strong>{{ vacancy.title }}</strong> - {{ vacancy.company.name }}
                     </div>
+
+                    <div class="vacancy-meta" style="font-size: 13px; color: #666;">
+                        Створено:
+                        {% if vacancy.recruiter %}
+                            Рекрутером — {{ vacancy.recruiter.user.get_full_name|default:vacancy.recruiter.user.email }}
+                        {% else %}
+                            Емплойєром напряму
+                        {% endif %}
+                    </div>
+
                     <div class="vacancy-description">
                         <p>{{ vacancy.description|truncatewords:20 }}</p>
                     </div>
+
                     <div class="vacancy-actions">
                         <a href="{% url 'vacancy-edit' vacancy.id %}" class="btn btn-warning btn-sm">Редагувати</a>
 

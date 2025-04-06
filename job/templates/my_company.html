@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    {% if company %}
+      <h2 class="text-primary mb-4">
+        <img src="{% static 'images/company.svg' %}" alt="Logo" class="img-fluid mb-4" style="max-width: 150px; height: auto;">
+        {{ company.name }}
+      </h2>
+
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <p><strong>Опис:</strong> {{ company.description }}</p>
+          <p><strong>Вебсайт:</strong> <a href="{{ company.website }}" target="_blank" class="text-primary">{{ company.website }}</a></p>
+          <p><strong>Місцезнаходження:</strong> {{ company.location }}</p>
+        </div>
+      </div>
+    {% else %}
+      <h2 class="mb-4 text-primary">Ваша компанія</h2>
+      <p class="text-danger">Ви ще не створили компанію.</p>
+      <a href="{% url 'create_company' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Створити компанію
+      </a>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -159,16 +159,13 @@
                 </li>
               {% elif user.role == 'employer' %}
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'company_list' %}">Company</a>
+                  <a class="nav-link" href="{% url 'my_company' %}">My Company</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'create_recruiter' %}">Recruiters</a>
+                  <a class="nav-link" href="{% url 'recruiter_list' %}">Recruiters</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'vacancy-list' %}">Vacancies</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'candidates-list' %}">Candidates</a>
                 </li>
               {% elif user.role == 'jobseeker' %}
                 <li class="nav-item">

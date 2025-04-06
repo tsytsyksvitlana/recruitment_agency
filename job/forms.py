@@ -1,5 +1,6 @@
 from django import forms
 
+from job.models import Employer
 from job.models.company import Company
 from job.models.job_vacancy import JobVacancy
 from job.models.location import Location
@@ -12,6 +13,10 @@ class JobVacancyForm(forms.ModelForm):
 
 
 class CompanyForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
     class Meta:
         model = Company
         fields = ['name', 'description', 'website', 'city', 'street', 'building', 'country', 'postal_code']
@@ -42,5 +47,13 @@ class CompanyForm(forms.ModelForm):
 
         if commit:
             company.save()
+
+            if self.user:
+                try:
+                    employer = self.user.employer_profile
+                    employer.company = company
+                    employer.save()
+                except Employer.DoesNotExist:
+                    pass
 
         return company

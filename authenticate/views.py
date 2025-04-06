@@ -51,20 +51,18 @@ class RecruiterCreateView(LoginRequiredMixin, View):
     """
     template_name = "create_recruiter.html"
 
-    def get(self, request):
-        if request.user.role != "employer":
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or request.user.role != "employer":
             return redirect("login")
+        return super().dispatch(request, *args, **kwargs)
 
+    def get(self, request):
         form = RecruiterCreateForm()
         return render(request, self.template_name, {"form": form})
 
     def post(self, request):
-        if request.user.role != "employer":
-            return redirect("login")
-
         form = RecruiterCreateForm(request.POST)
         if form.is_valid():
             form.save(request.user)
             return redirect("index")
-
         return render(request, self.template_name, {"form": form})

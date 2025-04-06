@@ -7,8 +7,10 @@ from job.views import (
     JobVacancyCreateView,
     JobVacancyListView,
     JobVacancyUpdateView,
+    MyCompanyView,
     activate_vacancy,
-    deactivate_vacancy
+    deactivate_vacancy,
+    RecruiterListView
 )
 
 urlpatterns = [
@@ -23,4 +25,7 @@ urlpatterns = [
     path('company/create/', CreateCompanyView.as_view(), name='create_company'),
     path('companies/', CompanyListView.as_view(), name='company_list'),
     path('company/<int:pk>/', CompanyDetailView.as_view(), name='company_detail'),
+    path('my-company/', MyCompanyView.as_view(), name='my_company'),
+
+    path('recruiters/', RecruiterListView.as_view(), name='recruiter_list'),
 ]
