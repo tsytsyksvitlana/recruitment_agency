@@ -27,54 +27,28 @@ from job.models.job_vacancy import JobVacancy
 logger = logging.getLogger(__name__)
 
 
-class JobVacancyListView(LoginRequiredMixin, ListView):
+class JobVacancyManagementListView(LoginRequiredMixin, ListView):
+    """
+    View for managing job vacancies by employers and recruiters in certain company
+    """
     model = JobVacancy
     template_name = 'job_list.html'
     context_object_name = 'vacancies'
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     logger.debug(f"User {user.email} is requesting vacancies with role {user.role}")
-    #
-    #     if user.role == "employer":
-    #         try:
-    #             employer = Employer.objects.filter(user=user).first()
-    #             employers = Employer.objects.filter(user=user).all()
-    #             logger.debug(employers)
-    #             return employers
-    #             logger.debug(f"Employer found for user {user.email}, company: {employer.company.name}")
-    #             vacancies = JobVacancy.objects.filter(company=employer.company)
-    #             logger.debug(f"Found {vacancies.count()} vacancies for employer {employer.company.name}")
-    #             return vacancies
-    #         except Employer.DoesNotExist:
-    #             logger.error(f"Employer profile does not exist for user {user.email}")
-    #             return JobVacancy.objects.none()
-    #
-    #     elif user.role == "recruiter":
-    #         try:
-    #             recruiter = Recruiter.objects.filter(user=user).first()
-    #             company = recruiter.company
-    #             logger.debug(f"Recruiter found for user {user.email}, company: {company.name}")
-    #
-    #             # Вакансії рекрутера
-    #             my_vacancies = JobVacancy.objects.filter(recruiter=recruiter)
-    #             logger.debug(f"Found {my_vacancies.count()} vacancies for recruiter {user.email}")
-    #
-    #             # Вакансії колег
-    #             colleagues_vacancies = JobVacancy.objects.filter(company=company).exclude(recruiter=recruiter)
-    #             logger.debug(f"Found {colleagues_vacancies.count()} vacancies for recruiter colleagues in company {company.name}")
-    #
-    #             # Об'єднуємо вакансії рекрутера та колег
-    #             all_vacancies = my_vacancies.union(colleagues_vacancies)
-    #             logger.debug(f"Total vacancies for recruiter {user.email}: {all_vacancies.count()}")
-    #             return all_vacancies
-    #
-    #         except Recruiter.DoesNotExist:
-    #             logger.error(f"Recruiter profile does not exist for user {user.email}")
-    #             return JobVacancy.objects.none()
-    #
-    #     logger.info(f"No valid role found for user {user.email}, returning empty queryset")
-    #     return JobVacancy.objects.none()
+    def get_queryset(self):
+        user = self.request.user
+
+        company = None
+
+        if hasattr(user, 'employer_profile') and user.employer_profile.company:
+            company = user.employer_profile.company
+        elif hasattr(user, 'recruiter_profile') and user.recruiter_profile.company:
+            company = user.recruiter_profile.company
+
+        if not company:
+            return JobVacancy.objects.none()
+
+        return JobVacancy.objects.filter(company=company)
 
 
 class JobVacancyCreateView(LoginRequiredMixin, CreateView):

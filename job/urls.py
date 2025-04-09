@@ -10,6 +10,7 @@ from job.views import (
     JobSeekerProfileUpdateView,
     JobVacancyCreateView,
     JobVacancyListView,
+    JobVacancyManagementListView,
     JobVacancyUpdateView,
     MyCompanyView,
     RecruiterListView,
@@ -18,7 +19,7 @@ from job.views import (
 )
 
 urlpatterns = [
-    path('vacancies', JobVacancyListView.as_view(), name='vacancy-list'),
+    path('vacancies/manage/', JobVacancyManagementListView.as_view(), name='vacancy-list'),
     path('vacancy/create/', JobVacancyCreateView.as_view(), name='vacancy-create'),
     path('<int:pk>/edit/', JobVacancyUpdateView.as_view(), name='vacancy-edit'),
     path('<int:pk>/deactivate/', deactivate_vacancy, name='vacancy-deactivate'),
