@@ -75,14 +75,14 @@ class JobVacancyUpdateView(LoginRequiredMixin, UpdateView):
 
 
 def deactivate_vacancy(request, pk):
-    vacancy = get_object_or_404(JobVacancy, pk=pk, recruiter__user=request.user)
+    vacancy = get_object_or_404(JobVacancy, pk=pk)
     vacancy.is_active = False
     vacancy.save()
     return redirect('vacancy-list')
 
 
 def activate_vacancy(request, pk):
-    vacancy = get_object_or_404(JobVacancy, pk=pk, recruiter__user=request.user)
+    vacancy = get_object_or_404(JobVacancy, pk=pk)
     vacancy.is_active = True
     vacancy.save()
     return redirect('vacancy-list')
