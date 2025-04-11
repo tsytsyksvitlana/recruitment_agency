@@ -12,7 +12,8 @@
 
       <a href="{% url 'profile_edit' %}" class="edit-button">Edit Profile</a>
     {% else %}
-      <p>You don't have a profile yet. <a href="{{ create_profile_url }}" class="create-profile-link">Create your profile</a></p>
+      <p>You don't have a profile yet.</p>
+    <a href="{{ create_profile_url }}" class="create-profile-link">Create your profile</a>
     {% endif %}
   </div>
 {% endblock %}

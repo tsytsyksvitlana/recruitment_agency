@@ -169,7 +169,7 @@
                 </li>
               {% elif user.role == 'jobseeker' %}
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'vacancy-list' %}">Vacancies</a>
+                  <a class="nav-link" href="{% url 'jobseeker_job_vacancies_list' %}">Vacancies</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'profile_view' %}">My Profile</a>
