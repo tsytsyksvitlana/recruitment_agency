@@ -7,10 +7,10 @@
         <ul class="vacancy-list">
             {% for vacancy in vacancies %}
                 <li class="vacancy-item {% if not vacancy.is_active %}inactive{% endif %}">
-                    <div class="vacancy-details">
-                        <strong>{{ vacancy.title }}</strong> - {{ vacancy.company.name }}
-                    </div>
 
+                <a href="{% url 'vacancy_detail' vacancy.id %}" class="vacancy-details d-block text-decoration-none">
+                    <strong>{{ vacancy.title }}</strong> - {{ vacancy.company.name }}
+                </a>
                     <div class="vacancy-meta" style="font-size: 13px; color: #666;">
                         Створено:
                         {% if vacancy.recruiter %}

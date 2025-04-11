@@ -1,0 +1,83 @@
+{% extends "main.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="text-success mb-4">
+      <img src="{% static 'images/job.svg' %}" alt="Job Icon" class="img-fluid mb-4 logo-animate" style="max-width: 80px; height: auto;">
+      {{ vacancy.title }}
+    </h2>
+
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <p>{{ vacancy.description }}</p>
+        <p>
+        <img src="{% static 'images/company.svg' %}" alt="Company" style="width: 16px; height: 16px; margin-right: 5px;">
+        {{ vacancy.company.name }}
+        </p>
+        <p>
+        <img src="{% static 'images/location.svg' %}" alt="Company" style="width: 16px; height: 16px; margin-right: 5px;">
+        {{ vacancy.location }}
+        </p>
+        <img src="{% static 'images/date.svg' %}" alt="Company" style="width: 16px; height: 16px; margin-right: 5px;">
+        {{ vacancy.created_at|date:"d.m.Y" }}
+        </p>
+        <p><strong>Статус:</strong>
+          {% if vacancy.is_active %}
+            <span class="text-success">Активна</span>
+          {% else %}
+            <span class="text-danger">Неактивна</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    {% if applications %}
+      <h4 class="mb-3">Відгуки на вакансію</h4>
+      <div class="list-group mb-4">
+        {% for app in applications %}
+          <div class="list-group-item">
+            <h6 class="mb-1">Кандидат: {{ app.job_seeker.user.username }}</h6>
+            <p class="mb-1">{{ app.cover_letter|linebreaks }}</p>
+            <small class="text-muted">Дата подання: {{ app.applied_at|date:"d.m.Y H:i" }}</small>
+          </div>
+        {% endfor %}
+      </div>
+    {% elif applications is not none %}
+      <p class="text-muted">Наразі немає відгуків на цю вакансію.</p>
+    {% endif %}
+
+    <a href="{% url 'vacancy-list' %}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left-circle"></i> Назад до списку вакансій
+    </a>
+  </div>
+{% endblock %}
+
+{% block extra_styles %}
+  <style>
+    .logo-animate {
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+      border-color: #545b62;
+    }
+  </style>
+{% endblock %}

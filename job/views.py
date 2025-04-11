@@ -74,6 +74,19 @@ class JobVacancyUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('vacancy-list')
 
 
+class JobVacancyDetailView(DetailView):
+    model = JobVacancy
+    template_name = 'job_detail.html'
+    context_object_name = 'vacancy'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vacancy = self.get_object()
+        applications = JobApplication.objects.filter(vacancy = vacancy).select_related()
+        context['applications'] = applications
+        return context
+
+
 def deactivate_vacancy(request, pk):
     vacancy = get_object_or_404(JobVacancy, pk=pk)
     vacancy.is_active = False
