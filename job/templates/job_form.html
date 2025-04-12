@@ -1,14 +1,59 @@
 {% extends "main.html" %}
 
 {% block content %}
-    <h2 class="page-title">{% if object %}Редагувати вакансію{% else %}Створити вакансію{% endif %}</h2>
-    <form method="post" class="form-container">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.as_p }}
-        </div>
-        <button type="submit" class="btn btn-primary">Зберегти</button>
-    </form>
+<h2 class="page-title">
+    {% if object %}Редагувати вакансію{% else %}Створити вакансію{% endif %}
+</h2>
+
+<form method="post" class="form-container">
+    {% csrf_token %}
+
+    <div class="form-group">
+        {{ form.title.label_tag }}
+        {{ form.title }}
+        {% if form.title.errors %}
+            <div class="text-danger">{{ form.title.errors }}</div>
+        {% endif %}
+
+        {{ form.description.label_tag }}
+        {{ form.description }}
+        {% if form.description.errors %}
+            <div class="text-danger">{{ form.description.errors }}</div>
+        {% endif %}
+
+        {{ form.city.label_tag }}
+        {{ form.city }}
+        {% if form.city.errors %}
+            <div class="text-danger">{{ form.city.errors }}</div>
+        {% endif %}
+
+        {{ form.street.label_tag }}
+        {{ form.street }}
+        {% if form.street.errors %}
+            <div class="text-danger">{{ form.street.errors }}</div>
+        {% endif %}
+
+        {{ form.building.label_tag }}
+        {{ form.building }}
+        {% if form.building.errors %}
+            <div class="text-danger">{{ form.building.errors }}</div>
+        {% endif %}
+
+        {{ form.country.label_tag }}
+        {{ form.country }}
+        {% if form.country.errors %}
+            <div class="text-danger">{{ form.country.errors }}</div>
+        {% endif %}
+
+        {{ form.postal_code.label_tag }}
+        {{ form.postal_code }}
+        {% if form.postal_code.errors %}
+            <div class="text-danger">{{ form.postal_code.errors }}</div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+</form>
 {% endblock %}
 
 {% block extra_styles %}

@@ -7,9 +7,19 @@ from job.models.location import Location
 
 
 class JobVacancyForm(forms.ModelForm):
+    city = forms.CharField(max_length=255)
+    street = forms.CharField(max_length=255, required=False)
+    building = forms.CharField(max_length=50, required=False)
+    country = forms.CharField(max_length=255)
+    postal_code = forms.CharField(max_length=20, required=False)
+
     class Meta:
         model = JobVacancy
-        fields = ['title', 'description', 'company', 'location']
+        fields = ['title', 'description']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data
 
 
 class CompanyForm(forms.ModelForm):

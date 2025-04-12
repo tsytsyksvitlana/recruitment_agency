@@ -20,6 +20,7 @@ from job.models import (
     Employer,
     JobApplication,
     JobSeekerProfile,
+    Location,
     Recruiter
 )
 from job.models.job_vacancy import JobVacancy
@@ -58,12 +59,36 @@ class JobVacancyCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('vacancy-list')
 
     def form_valid(self, form):
+        user = self.request.user
+
+        location_data = {
+            "city": form.cleaned_data.get("city"),
+            "street": form.cleaned_data.get("street"),
+            "building": form.cleaned_data.get("building"),
+            "country": form.cleaned_data.get("country"),
+            "postal_code": form.cleaned_data.get("postal_code"),
+        }
+
+        location, created = Location.objects.get_or_create(**location_data)
+        form.instance.location = location
+
         try:
-            form.instance.recruiter = self.request.user.recruiter_profile
+            if hasattr(user, 'recruiter_profile'):
+                recruiter = user.recruiter_profile
+                form.instance.recruiter = recruiter
+                form.instance.company = recruiter.company
+            elif hasattr(user, 'employer_profile'):
+                employer = user.employer_profile
+                form.instance.recruiter = None
+                form.instance.company = employer.company
+            else:
+                raise ObjectDoesNotExist("Профіль не знайдено")
         except ObjectDoesNotExist:
             messages.error(
-                self.request, "Ваш профіль рекрутера не знайдено. Створіть профіль перед створенням вакансії."
+                self.request, "Ваш профіль не знайдено. Створіть профіль перед створенням вакансії."
             )
+            return self.form_invalid(form)
+
         return super().form_valid(form)
 
 
@@ -82,7 +107,7 @@ class JobVacancyDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         vacancy = self.get_object()
-        applications = JobApplication.objects.filter(vacancy = vacancy).select_related()
+        applications = JobApplication.objects.filter(vacancy=vacancy).select_related()
         context['applications'] = applications
         return context
 
