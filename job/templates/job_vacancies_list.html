@@ -15,33 +15,54 @@
       <input type="text" name="location" id="location" placeholder="Search by city" value="{{ request.GET.location }}">
     </div>
 
+    <div class="search-field">
+      <label for="sort">Sort by:</label>
+      <select name="sort" id="sort">
+        <option value="">Select</option>
+        <option value="salary_asc" {% if request.GET.sort == 'salary_asc' %}selected{% endif %}>Salary (Low to High)</option>
+        <option value="salary_desc" {% if request.GET.sort == 'salary_desc' %}selected{% endif %}>Salary (High to Low)</option>
+        <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest</option>
+        <option value="reviews" {% if request.GET.sort == 'reviews' %}selected{% endif %}>With Reviews</option>
+        <option value="not_applied" {% if request.GET.sort == 'not_applied' %}selected{% endif %}>Not Applied</option>
+      </select>
+    </div>
+
     <button type="submit" class="search-button">Search</button>
   </form>
 
   <div class="vacancy-list">
-    {% for vacancy in vacancies %}
-      <div class="vacancy-card">
-        <h3>{{ vacancy.title }}</h3>
-        <p>{{ vacancy.description|truncatewords:30 }}</p>
-        <p><img src="{% static 'images/company.svg' %}" alt="Logo" class="img-fluid" style="max-width: 25px; height: auto;">{{ vacancy.company }}</p>
-        <p><img src="{% static 'images/location.svg' %}" alt="Logo" class="img-fluid" style="max-width: 25px; height: auto;"> {{ vacancy.location }}</p>
+    {% if vacancies %}
+      {% for vacancy in vacancies %}
+        <div class="vacancy-card">
+          <h3>{{ vacancy.title }}</h3>
+          <p>{{ vacancy.description|truncatewords:30 }}</p>
+          <p><img src="{% static 'images/company.svg' %}" alt="Logo" class="img-fluid" style="max-width: 25px; height: auto;">{{ vacancy.company }}</p>
+          <p><img src="{% static 'images/location.svg' %}" alt="Logo" class="img-fluid" style="max-width: 25px; height: auto;"> {{ vacancy.location }}</p>
 
-        {% if user.is_authenticated %}
-          {% if vacancy.id in applied_vacancies %}
-            <a href="#" class="apply-button disabled" style="background-color: grey; cursor: not-allowed;">Already Applied</a>
+          {% if vacancy.reviews.count > 0 %}
+            <p>Has Reviews: Yes</p>
           {% else %}
-            <a href="{% url 'job_application_create' vacancy.id %}" class="apply-button">Apply</a>
+            <p>Has Reviews: No</p>
           {% endif %}
-        {% else %}
-          <p>You need to log in to apply for jobs.</p>
-        {% endif %}
-      </div>
-    {% empty %}
+
+          {% if user.is_authenticated %}
+            {% if vacancy.id in applied_vacancies %}
+              <a href="#" class="apply-button disabled" style="background-color: grey; cursor: not-allowed;">Already Applied</a>
+            {% else %}
+              <a href="{% url 'job_application_create' vacancy.id %}" class="apply-button">Apply</a>
+            {% endif %}
+          {% else %}
+            <p>You need to log in to apply for jobs.</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
       <p>No job vacancies found.</p>
-    {% endfor %}
+    {% endif %}
   </div>
 
 {% endblock %}
+
 
 {% block extra_styles %}
 <style>
@@ -89,7 +110,7 @@
     width: 80px;
   }
 
-  .search-field input {
+  .search-field input, .search-field select {
     padding: 12px;
     width: 100%;
     border: 1px solid #ddd;
@@ -189,7 +210,7 @@
       align-items: flex-start;
     }
 
-    .search-field input {
+    .search-field input, .search-field select {
       width: 100%;
       max-width: 350px;
     }

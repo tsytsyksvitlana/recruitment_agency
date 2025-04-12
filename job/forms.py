@@ -15,7 +15,7 @@ class JobVacancyForm(forms.ModelForm):
 
     class Meta:
         model = JobVacancy
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'salary']
 
     def clean(self):
         cleaned_data = super().clean()

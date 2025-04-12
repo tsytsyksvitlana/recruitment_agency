@@ -3,6 +3,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
@@ -235,12 +236,27 @@ class JobVacancyListView(ListView):
 
         search_title = self.request.GET.get('title', '')
         search_location = self.request.GET.get('location', '')
+        sort_by = self.request.GET.get('sort', '')
 
         if search_title:
             queryset = queryset.filter(title__icontains=search_title)
 
         if search_location:
             queryset = queryset.filter(location__icontains=search_location)
+
+        if sort_by == 'salary_asc':
+            queryset = queryset.order_by('salary')
+        elif sort_by == 'salary_desc':
+            queryset = queryset.order_by('-salary')
+        elif sort_by == 'newest':
+            queryset = queryset.order_by('-created_at')
+        elif sort_by == 'reviews':
+            queryset = queryset.annotate(num_reviews=Count('reviews')).order_by('-num_reviews')
+        elif sort_by == 'not_applied':
+            if self.request.user.is_authenticated:
+                jobseeker_profile = self.request.user.jobseeker_profile
+                applied_vacancies = jobseeker_profile.applications.values_list('vacancy', flat=True)
+                queryset = queryset.exclude(id__in=applied_vacancies)
 
         return queryset
 
@@ -252,6 +268,7 @@ class JobVacancyListView(ListView):
             applied_vacancies = jobseeker_profile.applications.values_list('vacancy', flat=True)
             context['applied_vacancies'] = applied_vacancies
 
+        context['sort'] = self.request.GET.get('sort', '')
         return context
 
 
