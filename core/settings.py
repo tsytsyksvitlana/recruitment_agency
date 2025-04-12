@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'widget_tweaks',
+    'drf_yasg',
     'authenticate.apps.AuthenticateConfig',
     'logs.apps.LogsConfig',
     'job.apps.JobConfig',
