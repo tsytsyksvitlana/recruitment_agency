@@ -109,3 +109,12 @@ class JobApplicationForm(forms.ModelForm):
         widgets = {
             'cover_letter': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your cover letter'}),
         }
+
+
+class ApplicationFilterForm(forms.Form):
+    SORT_CHOICES = [
+        ('date_asc', 'Дата подачі (старі до нових)'),
+        ('date_desc', 'Дата подачі (нові до старих)'),
+    ]
+    sort_by = forms.ChoiceField(choices=SORT_CHOICES, required=False)
+    has_cover_letter = forms.BooleanField(required=False, label='Має супровідний лист')

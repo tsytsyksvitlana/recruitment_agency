@@ -1,5 +1,4 @@
 import logging
-from datetime import timezone
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,6 +11,7 @@ from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 
 from job.forms import (
+    ApplicationFilterForm,
     CompanyForm,
     JobApplicationForm,
     JobSeekerProfileForm,
@@ -101,21 +101,6 @@ class JobVacancyUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('vacancy-list')
 
 
-from django.utils import timezone
-from django.shortcuts import render
-
-from django import forms
-
-class ApplicationFilterForm(forms.Form):
-    SORT_CHOICES = [
-        ('date_asc', 'Дата подачі (старі до нових)'),
-        ('date_desc', 'Дата подачі (нові до старих)'),
-    ]
-    sort_by = forms.ChoiceField(choices=SORT_CHOICES, required=False)
-    has_cover_letter = forms.BooleanField(required=False, label='Має кавер леттер')
-
-from django.utils import timezone
-
 class JobVacancyDetailView(DetailView):
     model = JobVacancy
     template_name = 'job_detail.html'
@@ -125,25 +110,20 @@ class JobVacancyDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         vacancy = self.get_object()
 
-        # Отримуємо форму фільтрації
         form = ApplicationFilterForm(self.request.GET)
 
-        # Фільтруємо кандидатів
         applications = JobApplication.objects.filter(vacancy=vacancy).select_related('job_seeker')
 
-        # Перевірка форми на валідність
         if form.is_valid():
             sort_by = form.cleaned_data.get('sort_by')
             has_cover_letter = form.cleaned_data.get('has_cover_letter')
 
-            # Фільтрація за наявністю кавер леттера
             if has_cover_letter is not None:
                 if has_cover_letter:
                     applications = applications.exclude(cover_letter__exact='')
                 else:
                     applications = applications.filter(cover_letter__exact='')
 
-            # Сортування за датою
             if sort_by == 'date_asc':
                 applications = applications.order_by('applied_at')
             elif sort_by == 'date_desc':
@@ -152,7 +132,6 @@ class JobVacancyDetailView(DetailView):
         context['applications'] = applications
         context['form'] = form
         return context
-
 
 
 def deactivate_vacancy(request, pk):

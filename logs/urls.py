@@ -1,8 +1,13 @@
-# from logs.views import ()
+from django.urls import path
 
+from logs.views import (
+    ActionLogListView,
+    NotificationCreateView,
+    NotificationListView
+)
 
 urlpatterns = [
-    # path("auth/register/", UserRegisterView.as_view(), name="register"),
-    # path("auth/login/", UserLoginView.as_view(), name="login"),
-    # path("auth/logout/", UserLogoutView.as_view(), name="logout"),
+    path('api/logs/', ActionLogListView.as_view(), name='get_logs'),
+    path('api/notifications/', NotificationListView.as_view(), name='get_notifications'),
+    path('api/notifications/create/', NotificationCreateView.as_view(), name='create_notification'),
 ]
