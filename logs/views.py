@@ -1,7 +1,7 @@
 from django.utils.dateparse import parse_datetime
-from rest_framework import generics
-from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import generics
 
 from logs.models.action_log import ActionLog
 from logs.models.notification import Notification

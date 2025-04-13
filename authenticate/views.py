@@ -11,6 +11,7 @@ from authenticate.forms import (
     UserLoginForm,
     UserRegisterForm
 )
+from logs.models.action_log import ActionLog
 
 
 class UserRegisterView(CreateView):
@@ -21,6 +22,11 @@ class UserRegisterView(CreateView):
     success_url = reverse_lazy("login")
     form_class = UserRegisterForm
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        ActionLog.objects.create(user=self.object, action="User registered")
+        return response
+
 
 class UserLoginView(LoginView):
     """
@@ -29,12 +35,17 @@ class UserLoginView(LoginView):
     template_name = "login.html"
     form_class = UserLoginForm
 
+    def form_valid(self, form):
+        ActionLog.objects.create(user=form.get_user(), action="User logged in")
+        return super().form_valid(form)
+
 
 class UserLogoutView(View):
     """
     View logs out the user and redirects to the login page.
     """
     def get(self, request):
+        ActionLog.objects.create(user=request.user, action="User logged out")
         logout(request)
         return redirect("login")
 
@@ -64,5 +75,9 @@ class RecruiterCreateView(LoginRequiredMixin, View):
         form = RecruiterCreateForm(request.POST)
         if form.is_valid():
             form.save(request.user)
+            ActionLog.objects.create(
+                user=request.user,
+                action=f"Recruiter account created for {form.cleaned_data['email']}"
+            )
             return redirect("index")
         return render(request, self.template_name, {"form": form})

@@ -26,8 +26,13 @@ from job.models import (
     Recruiter
 )
 from job.models.job_vacancy import JobVacancy
+from logs.models.action_log import ActionLog
 
 logger = logging.getLogger(__name__)
+
+
+def log_action(user, action_type, description):
+    ActionLog.objects.create(user=user, action_type=action_type, description=description)
 
 
 class JobVacancyManagementListView(LoginRequiredMixin, ListView):
@@ -91,7 +96,9 @@ class JobVacancyCreateView(LoginRequiredMixin, CreateView):
             )
             return self.form_invalid(form)
 
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        log_action(user, "create_vacancy", f"Created vacancy: {form.instance.title}")
+        return response
 
 
 class JobVacancyUpdateView(LoginRequiredMixin, UpdateView):
@@ -99,6 +106,11 @@ class JobVacancyUpdateView(LoginRequiredMixin, UpdateView):
     form_class = JobVacancyForm
     template_name = 'job_form.html'
     success_url = reverse_lazy('vacancy-list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        log_action(self.request.user, "update_vacancy", f"Updated vacancy: {form.instance.title}")
+        return response
 
 
 class JobVacancyDetailView(DetailView):
@@ -138,6 +150,7 @@ def deactivate_vacancy(request, pk):
     vacancy = get_object_or_404(JobVacancy, pk=pk)
     vacancy.is_active = False
     vacancy.save()
+    log_action(request.user, "deactivate_vacancy", f"Deactivated vacancy: {vacancy.title}")
     return redirect('vacancy-list')
 
 
@@ -145,6 +158,7 @@ def activate_vacancy(request, pk):
     vacancy = get_object_or_404(JobVacancy, pk=pk)
     vacancy.is_active = True
     vacancy.save()
+    log_action(request.user, "activate_vacancy", f"Activated vacancy: {vacancy.title}")
     return redirect('vacancy-list')
 
 
@@ -156,7 +170,8 @@ class CreateCompanyView(View):
     def post(self, request):
         form = CompanyForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
+            company = form.save()
+            log_action(request.user, "create_company", f"Created company: {company.name}")
             return redirect('my_company')
         return render(request, 'create_company.html', {'form': form})
 
@@ -215,7 +230,9 @@ class JobSeekerProfileCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user.jobseeker_profile
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        log_action(self.request.user, "create_profile", "Created job seeker profile")
+        return response
 
 
 class JobSeekerProfileUpdateView(UpdateView):
@@ -226,6 +243,11 @@ class JobSeekerProfileUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.jobseeker_profile.profile
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        log_action(self.request.user, "update_profile", "Updated job seeker profile")
+        return response
 
 
 class JobSeekerProfileDetailView(DetailView):
@@ -306,7 +328,13 @@ class JobApplicationCreateView(CreateView):
     def form_valid(self, form):
         form.instance.job_seeker = self.request.user.jobseeker_profile
         form.instance.vacancy = JobVacancy.objects.get(id=self.kwargs['vacancy_id'])
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        log_action(
+            self.request.user,
+            "apply_job",
+            f"Applied to vacancy: {form.instance.vacancy.title}"
+        )
+        return response
 
     def get_success_url(self):
         return reverse_lazy('jobseeker_job_vacancies_list')
