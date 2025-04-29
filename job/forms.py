@@ -79,7 +79,7 @@ class JobSeekerProfileForm(forms.ModelForm):
 
     class Meta:
         model = JobSeekerProfile
-        fields = ['skills', 'experience', 'education', 'location']
+        fields = ['skills', 'experience', 'education']
         widgets = {
             'skills': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your skills'}),
             'experience': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your experience'}),
@@ -96,7 +96,7 @@ class JobSeekerProfileForm(forms.ModelForm):
         }
 
         if any(location_data.values()):
-            location = Location.objects.create(**location_data)
+            location, created = Location.objects.get_or_create(**location_data)
             self.instance.location = location
 
         return super().save(commit)

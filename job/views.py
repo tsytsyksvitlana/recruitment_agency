@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 def log_action(user, action_type, description):
-    ActionLog.objects.create(user=user, action_type=action_type, description=description)
+    ActionLog.objects.create(user=user, action=action_type, description=description)
 
 
 class JobVacancyManagementListView(LoginRequiredMixin, ListView):

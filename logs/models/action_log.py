@@ -6,4 +6,5 @@ class ActionLog(models.Model):
         'authenticate.User', on_delete=models.SET_NULL, null=True, related_name="action_logs"
     )
     action = models.TextField()
+    description = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

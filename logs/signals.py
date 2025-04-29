@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from logs.models.action_log import ActionLog
 from logs.models.notification import Notification
 
