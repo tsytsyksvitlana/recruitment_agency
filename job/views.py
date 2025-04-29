@@ -269,6 +269,24 @@ class JobSeekerProfileDetailView(DetailView):
         return context
 
 
+class JobSeekerListView(LoginRequiredMixin, ListView):
+    model = JobSeekerProfile
+    template_name = 'job_seeker_list.html'
+    context_object_name = 'job_seekers'
+
+    def get_queryset(self):
+        queryset = JobSeekerProfile.objects.all()
+        search_name = self.request.GET.get('name', '')
+        if search_name:
+            queryset = queryset.filter(user__user__first_name__icontains=search_name)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_name'] = self.request.GET.get('name', '')
+        return context
+
+
 class JobVacancyListView(ListView):
     model = JobVacancy
     template_name = 'job_vacancies_list.html'

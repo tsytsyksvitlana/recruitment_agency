@@ -5,6 +5,7 @@ from job.views import (
     CompanyListView,
     CreateCompanyView,
     JobApplicationCreateView,
+    JobSeekerListView,
     JobSeekerProfileCreateView,
     JobSeekerProfileDetailView,
     JobSeekerProfileUpdateView,
@@ -27,7 +28,7 @@ urlpatterns = [
     path('<int:pk>/deactivate/', deactivate_vacancy, name='vacancy-deactivate'),
     path('<int:pk>/activate/', activate_vacancy, name='vacancy-activate'),
 
-    path('candidates/', JobVacancyUpdateView.as_view(), name='candidates-list'),
+    path('job-seekers/', JobSeekerListView.as_view(), name='candidates-list'),
 
     path('jobseeker/vacancies/', JobVacancyListView.as_view(), name='jobseeker_job_vacancies_list'),
     path('jobseeker/apply/<int:vacancy_id>/', JobApplicationCreateView.as_view(), name='job_application_create'),

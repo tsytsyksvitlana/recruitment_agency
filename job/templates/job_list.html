@@ -23,7 +23,11 @@
                     <div class="vacancy-description">
                         <p>{{ vacancy.description|truncatewords:20 }}</p>
                     </div>
-
+                    {% if vacancy.salary %}
+                    <div class="salary">
+                        <p>{{ vacancy.salary }} {{vacancy.currency}}</p>
+                    </div>
+                    {% endif %}
                     <div class="vacancy-actions">
                         <a href="{% url 'vacancy-edit' vacancy.id %}" class="btn btn-warning btn-sm">Редагувати</a>
 
@@ -148,6 +152,12 @@
 
         .btn-success:hover {
             background-color: #27ae60;
+        }
+
+        .salary p {
+            font-size: 16px;
+            font-weight: 600;
+            color: #006400; /* Dark green color */
         }
 
         .form-container {

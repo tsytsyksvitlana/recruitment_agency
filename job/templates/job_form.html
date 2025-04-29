@@ -21,6 +21,18 @@
             <div class="text-danger">{{ form.description.errors }}</div>
         {% endif %}
 
+        {{ form.salary.label_tag }}
+        {{ form.salary }}
+        {% if form.salary.errors %}
+            <div class="text-danger">{{ form.salary.errors }}</div>
+        {% endif %}
+
+        {{ form.currency.label_tag }}
+        {{ form.currency }}
+        {% if form.currency.errors %}
+            <div class="text-danger">{{ form.currency.errors }}</div>
+        {% endif %}
+
         {{ form.city.label_tag }}
         {{ form.city }}
         {% if form.city.errors %}

@@ -6,3 +6,6 @@ class JobApplication(models.Model):
     vacancy = models.ForeignKey('job.JobVacancy', on_delete=models.CASCADE, related_name="applications")
     cover_letter = models.TextField(blank=True)
     applied_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.job_seeker} - {self.vacancy}"

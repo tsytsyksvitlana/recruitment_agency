@@ -1,0 +1,124 @@
+{% extends "main.html" %}
+
+{% block content %}
+  <h1 class="page-title">👥 Список шукачів роботи</h1>
+
+  <div class="search-container">
+    <form method="get" class="search-form">
+      <input type="text" name="name" value="{{ search_name }}" placeholder="🔍 Пошук за іменем" class="search-input" />
+      <button type="submit" class="search-button">🔎 Шукати</button>
+    </form>
+  </div>
+
+  <div class="job-seeker-list">
+    <ul>
+      {% for job_seeker in job_seekers %}
+        <li class="job-seeker-item">
+            <div class="job-seeker-info">
+              <p class="job-seeker-name">👤 {{ job_seeker.user.user.first_name }} {{ job_seeker.user.user.last_name }}</p>
+              <p>🧠 {{ job_seeker.skills }}</p>
+              <span >💼 {{ job_seeker.experience }}</span>
+              {% if job_seeker.location %}
+              <p class="job-seeker-location">📍 {{ job_seeker.location }}</p>
+              {% endif %}
+            </div>
+        </li>
+      {% empty %}
+        <li class="no-results">❌ Шукачів роботи не знайдено.</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #222;
+    text-align: center;
+  }
+
+  .search-container {
+    margin-bottom: 25px;
+    text-align: center;
+  }
+
+  .search-form {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .search-input {
+    padding: 10px 15px;
+    font-size: 1rem;
+    margin-right: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    width: 260px;
+  }
+
+  .search-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .search-button:hover {
+    background-color: #0b7dda;
+  }
+
+  .job-seeker-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .job-seeker-item {
+    padding: 15px 20px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .job-seeker-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .job-seeker-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .job-seeker-location {
+    font-size: 0.95rem;
+    color: #666;
+  }
+
+  .job-seeker-title {
+    font-size: 1rem;
+    color: #333;
+    font-style: italic;
+  }
+
+  .no-results {
+    font-size: 1.2rem;
+    color: #c00;
+    text-align: center;
+    padding: 30px 0;
+    font-weight: bold;
+  }
+</style>
+{% endblock %}

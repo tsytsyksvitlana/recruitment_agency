@@ -12,10 +12,12 @@ class JobVacancyForm(forms.ModelForm):
     building = forms.CharField(max_length=50, required=False)
     country = forms.CharField(max_length=255)
     postal_code = forms.CharField(max_length=20, required=False)
+    salary = forms.DecimalField(max_digits=10, decimal_places=2)
+    currency = forms.CharField(max_length=10, required=False)
 
     class Meta:
         model = JobVacancy
-        fields = ['title', 'description', 'salary']
+        fields = ['title', 'description', 'salary', 'currency']
 
     def clean(self):
         cleaned_data = super().clean()
